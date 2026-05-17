@@ -10,7 +10,8 @@ It is formally verified using Z Notation, VDM-SL, and Alloy.
 ---
 
 ##  Group Members
-- Muhammad Furqan   
+- Muhammad Furqan
+- Muhammad Monam Majeed
 - Abdul Rehman  
 
 ---
