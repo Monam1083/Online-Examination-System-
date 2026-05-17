@@ -1,0 +1,62 @@
+-- ============================================================
+-- FUNCTIONAL SPECIFICATION USING VDM-SL
+-- Online Examination System
+-- ============================================================
+types
+  StudentId = token;
+  ExamId    = token;
+-- ============================================================
+-- SYSTEM STATE & INVARIANTS
+-- ============================================================
+state OnlineExam of
+  students  : set of StudentId
+  loggedIn  : set of StudentId
+  submitted : map StudentId to set of ExamId
+inv mk_OnlineExam(students, loggedIn, submitted) ==
+  loggedIn subset students and 
+  dom submitted subset students
+init mu == 
+  mu = mk_OnlineExam({}, {}, {|->})
+end
+-- ============================================================
+-- OPERATIONS
+-- ============================================================
+operations 
+-- ------------------------------------------------------------
+-- LOGIN
+-- Description   : Adds a registered student to the logged-in pool.
+-- Precondition  : Student must be registered in the system.
+-- ------------------------------------------------------------
+Login : StudentId ==> ()
+Login(s) == 
+( 
+    loggedIn := loggedIn union {s} 
+)
+pre s in set students;
+-- ------------------------------------------------------------
+-- START EXAM
+-- Description   : Allows a logged-in student to begin an exam.
+-- Precondition  : Student must be logged in.
+-- ------------------------------------------------------------
+StartExam : StudentId * ExamId ==> ()
+StartExam(s, e) == 
+(
+    skip
+)
+pre s in set loggedIn;
+-- ------------------------------------------------------------
+-- SUBMIT EXAM
+-- Description   : Records a completed exam for the student.
+-- Precondition  : Student must be logged in.
+-- ------------------------------------------------------------
+SubmitExam : StudentId * ExamId ==> ()
+SubmitExam(s, e) == 
+( 
+    if s in set dom submitted 
+    then submitted := submitted ++ {s |-> submitted(s) union {e}} 
+    else submitted := submitted munion {s |-> {e}} 
+)
+pre s in set loggedIn;
+-- ============================================================
+-- END OF SPECIFICATION
+-- ============================================================
